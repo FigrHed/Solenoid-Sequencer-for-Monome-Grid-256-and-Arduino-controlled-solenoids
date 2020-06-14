@@ -1,11 +1,11 @@
-import asyncio, monome, serial, StepSequenceGUI
+import asyncio, monome, serial, StepSequenceGUI, threading
 
 class GridSequencer(monome.GridApp):
     def __init__(self,tempo=120,noteLength=0.075):
         super().__init__() #('/monome') ##optional address causing problems##
-
-        # self.GUI = StepSequenceGUI.StepSequencerGUI()
-
+        
+        self.GUI = StepSequenceGUI.StepSequencerGUI()
+        print("Debug 2")
         self.trigger = trigger_function
 
         self.tempo = tempo
@@ -106,9 +106,17 @@ if __name__ == "__main__":
     serialosc.device_added_event.add_handler(serialosc_device_added)
 
     loop.run_until_complete(serialosc.connect())
+    print("Debug 3")
+    # guiThread = 
+    threading.Thread(target=grid_sequencer.GUI.window.mainloop()).start()
+    print("Debug 4")
+    # guiThread.start()
     try:
         loop.run_forever()
     except KeyboardInterrupt:
         grid_sequencer.grid.led_all(0)
+        
+
+    print("Debug 5")
 
 

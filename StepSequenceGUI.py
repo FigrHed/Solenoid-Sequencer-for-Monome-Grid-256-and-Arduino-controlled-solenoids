@@ -34,13 +34,13 @@ class StepSequencerGUI:
         self.noteLengthDisplay.pack()
 
         #start
-        self.window.mainloop()
+        # self.window.mainloop()
 
 
     def showTempo(self,tempoVal):
-        
         sel = "Tempo: " + str(self.tempo.get())
         self.tempoDisplay.config(text=sel, font = ("Courier", 14))
+        
 
     def showNoteLength(self,noteLengthVal):
         sel = "Note Length: " + str(self.noteLength.get())
