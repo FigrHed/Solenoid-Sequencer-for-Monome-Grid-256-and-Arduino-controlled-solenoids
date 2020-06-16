@@ -1,12 +1,12 @@
-import asyncio, monome, serial, StepSequenceGUI, threading
+import asyncio, monome, serial, StepSequenceGUI, threading, continuous_threading, multiprocessing
 
 class GridSequencer(monome.GridApp):
-    def __init__(self,tempo=120,noteLength=0.075):
+    def __init__(self,tempo=120,noteLength=0.075,trigger_function=''):
         super().__init__() #('/monome') ##optional address causing problems##
         
         self.GUI = StepSequenceGUI.StepSequencerGUI()
         print("Debug 2")
-        self.trigger = trigger_function
+        self.trigger = self.trigger_function
 
         self.tempo = tempo
         self.quarterNote = 60/self.tempo
@@ -49,8 +49,8 @@ class GridSequencer(monome.GridApp):
     #     pass
 
     def getQuarterNoteInterval(self):
-        # self.tempo = self.GUI.tempo
-        # self.quarterNote = 60/tempo
+        self.tempo = self.GUI.tempo.get()
+        self.quarterNote = 60/self.tempo
         return self.quarterNote
         
     def on_grid_key(self, x, y, s):
@@ -81,17 +81,22 @@ class GridSequencer(monome.GridApp):
                 currentNode = self.step[y][self.play_position]
                 self.buffer.led_level_set(x,y,self.step[y][x]*15)
                 if x == self.play_position and currentNode == 1:
-                    print("The STEP DATA " + str(currentNode))
+                    
                     self.trigger(self.play_position,y,currentNode)
         self.buffer.render(self.grid)
 
-
-if __name__ == "__main__":
-    def trigger_function(x,y,step):
+    def trigger_function(self, x,y,step):
         print ("Triggered: " + str(x) + " and " + str(y) + " which contains: " + str(step))
 
-    grid_sequencer = GridSequencer(120, 0.075)
 
+def step_trigger(x,y,step):
+    print("These bad boys got trigggggggggggggg: " + str(x) + " & " + str(y) )
+
+if __name__ == "__main__":
+    
+    grid_sequencer = GridSequencer(120, 0.075)
+    
+    grid_sequencer.trigger = step_trigger
 
     tempo = 0.01
 
@@ -102,21 +107,30 @@ if __name__ == "__main__":
         print('connected to {} ({})'.format(id,type))
         asyncio.ensure_future(grid_sequencer.grid.connect('127.0.0.1',port))
     
+    def gui_loop():
+        grid_sequencer.GUI.window.mainloop()
+
+    def sequencer_loop():
+        try:
+            loop.run_forever()
+        except KeyboardInterrupt:
+            grid_sequencer.grid.led_all(0)
+
     serialosc = monome.SerialOsc()
     serialosc.device_added_event.add_handler(serialosc_device_added)
 
     loop.run_until_complete(serialosc.connect())
     print("Debug 3")
-    # guiThread = 
-    threading.Thread(target=grid_sequencer.GUI.window.mainloop()).start()
-    print("Debug 4")
-    # guiThread.start()
-    try:
-        loop.run_forever()
-    except KeyboardInterrupt:
-        grid_sequencer.grid.led_all(0)
-        
 
+    # guiProcess = multiprocessing.Process(target=gui_loop)
+
+    # guiProcess.start()
+    sequencerProcess = threading.Thread(target=sequencer_loop)
+
+    print("Debug 4")
+    sequencerProcess.start()
     print("Debug 5")
+    gui_loop()    
+
 
 
