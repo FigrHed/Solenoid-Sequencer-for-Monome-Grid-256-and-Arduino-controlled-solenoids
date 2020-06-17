@@ -7,6 +7,7 @@ def scale(n,oldmin,oldmax,newmin,newmax):
 
 
 class SolenoidController():
+    # arduino = None
     def __init__(self):
         self.baudrate = 115200
         self.sol1Addr = '/sole1/on'
@@ -14,7 +15,7 @@ class SolenoidController():
         self.arduino_port = self.findArduinoPort()
         self.slip = sliplib.slip #.SlipEncoder()
         
-        self.findArduinoPort()
+        self.arduino = self.connect()
 
         
     
@@ -31,8 +32,10 @@ class SolenoidController():
 
     def connect(self):
         try:
-            self.arduino = serial.Serial(self.arduino_port,self.baudrate)
+            arduino = serial.Serial(self.arduino_port,self.baudrate)
             print("Connected to " + str(self.arduino_port) )
+            return arduino
+
         except:
             print("Could not connect to " + str(self.arduino_port) )
     
