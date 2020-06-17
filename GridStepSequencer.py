@@ -1,4 +1,4 @@
-import asyncio, monome, serial, StepSequenceGUI, threading
+import asyncio, monome, serial, threading
 
 class GridSequencer(monome.GridApp):
     def __init__(self,tempo=120,note_length=0.075):
@@ -35,7 +35,7 @@ class GridSequencer(monome.GridApp):
             else:
                 self.play_position += 1
             self.buffer.led_level_set(self.play_position, self.playHead, 15)
-            print(self.play_position, self.quarter_note)
+            # print(self.play_position, self.quarter_note)
             
             yield from asyncio.sleep(self.quarter_note)
             self.draw()

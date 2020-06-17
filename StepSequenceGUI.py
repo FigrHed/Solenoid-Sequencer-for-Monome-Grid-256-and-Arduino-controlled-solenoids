@@ -2,95 +2,110 @@ from tkinter import *
 
 
 class StepSequencerGUI:
-    def __init__(self, tempo=90, note_length=0.075, velocity=100):
+    def __init__(self, gui_tempo=90, gui_note_length=0.075, gui_velocity=100):
         #declare tools
         self.window = Tk()
         self.window.geometry("400x300")
-        self.tempo = DoubleVar()
-        self.note_length = DoubleVar()
-        self.velocity = DoubleVar()
+        
+        #probably not used (test)
+        self.tempo = 91
+        self.note_length = 0.076
+        self.velocity = 111
+        #the native parameters
+        self.gui_tempo = DoubleVar()
+        self.gui_note_length = DoubleVar()
+        self.gui_velocity = DoubleVar()
         #initialize elements
-        #tempo elements
-        self.tempo.set(tempo)
-        self.tempoSlider = Scale( self.window, variable = self.tempo, from_ = 30, to = 250, orient = HORIZONTAL, command = self.showTempo, width=25, length=200, showvalue=0, resolution=0.1)
-        self.tempoLabel = Label(self.window, text = "Tempo")
-        self.tempoDisplay = Label(self.window)
+        #gui_tempo elements
+        self.gui_tempo.set(gui_tempo)
+        self.gui_tempo_slider = Scale( self.window, variable = self.gui_tempo, from_ = 30, to = 250, orient = HORIZONTAL, command = self.showgui_Tempo, width=25, length=200, showvalue=0, resolution=0.1)
+        self.gui_tempo_label = Label(self.window, text = "Tempo")
+        self.gui_tempo_display = Label(self.window)
         
-        #notelength elements
-        self.note_length.set(note_length)
-        self.noteLengthSlider = Scale (self.window, variable = self.note_length, from_ = 0.01, to = 0.5, orient = HORIZONTAL, command = self.showNoteLength, width=25, length=200, showvalue=0, resolution=0.001)
-        self.noteLengthLabel = Label(self.window, text = "Note Length")
-        self.noteLengthDisplay = Label(self.window)
+        #gui_note_length_ elements
+        self.gui_note_length.set(gui_note_length)
+        self.gui_note_length_slider = Scale (self.window, variable = self.gui_note_length, from_ = 0.01, to = 0.5, orient = HORIZONTAL, command = self.showgui_note_length_, width=25, length=200, showvalue=0, resolution=0.001)
+        self.gui_note_length_label = Label(self.window, text = "Note Length")
+        self.gui_note_length_display = Label(self.window)
         
-        #velocity elements
-        self.velocity.set(velocity)
-        self.velocity_slider = Scale (self.window, variable = self.velocity, from_ = 0, to = 127, orient = HORIZONTAL, command = self.show_velocity, width=25, length=200, showvalue=0, resolution=1)
-        self.velocity_label = Label(self.window, text = "Velocity")
-        self.velocity_display = Label(self.window)
+        #gui_velocity elements
+        self.gui_velocity.set(gui_velocity)
+        self.gui_velocity_slider = Scale (self.window, variable = self.gui_velocity, from_ = 0, to = 127, orient = HORIZONTAL, command = self.show_gui_velocity, width=25, length=200, showvalue=0, resolution=1)
+        self.gui_velocity_label = Label(self.window, text = "Velocity")
+        self.gui_velocity_display = Label(self.window)
         
 
         #pack, make visible
-        self.tempoSlider.pack(anchor = CENTER)
-        self.tempoLabel.pack()
-        self.tempoDisplay.pack()
+        self.gui_tempo_slider.pack(anchor = CENTER)
+        self.gui_tempo_label.pack()
+        self.gui_tempo_display.pack()
         
-        self.noteLengthSlider.pack(anchor = CENTER)
-        self.noteLengthLabel.pack()
-        self.noteLengthDisplay.pack()
+        self.gui_note_length_slider.pack(anchor = CENTER)
+        self.gui_note_length_label.pack()
+        self.gui_note_length_display.pack()
         
-        self.velocity_slider.pack(anchor = CENTER)
-        self.velocity_label.pack()
-        self.velocity_display.pack()
+        self.gui_velocity_slider.pack(anchor = CENTER)
+        self.gui_velocity_label.pack()
+        self.gui_velocity_display.pack()
 
         #start
         # self.window.mainloop()
 
 
-    def showTempo(self,tempoVal):
-        sel = "Tempo: " + str(self.tempo.get())
-        self.tempoDisplay.config(text=sel, font = ("Courier", 14))
+    def showgui_Tempo(self,gui_tempo_val):
+        self.tempo = self.gui_tempo.get()
+        sel = "Tempo: " + str(gui_tempo_val)
+        self.gui_tempo_display.config(text=sel, font = ("Courier", 14))
         
 
-    def showNoteLength(self,noteLengthVal):
-        sel = "Note Length: " + str(self.note_length.get())
-        self.noteLengthDisplay.config(text=sel, font = ("Courier", 14))
+    def showgui_note_length_(self,gui_note_length_val):
+        sel = "Note Length: " + str(gui_note_length_val)
+        self.note_length = self.gui_note_length.get()
+        self.gui_note_length_display.config(text=sel, font = ("Courier", 14))
 
-    def show_velocity(self,velocity):
-        sel = "Velocity: " + str(self.velocity.get())
-        self.velocity_display.config(text=sel, font = ("Courier", 14))
+    def show_gui_velocity(self,gui_velocity_val):
+        sel = "Velocity: " + str(gui_velocity_val)
+        self.velocity = self.gui_velocity.get()
+        self.gui_velocity_display.config(text=sel, font = ("Courier", 14))
     
-    def get_tempo(self):
-        return self.tempo.get()
+    def get_gui_tempo(self):
+        # return self.gui_tempo.get()
+        # print("THIS IS GET GUI TEMPO TYPE: ", type(self.tempo))
+        # print("AND ITS VALUE IS: ", self.tempo)
+        return self.tempo
     
-    def set_tempo(self, newTempo):
-         self.tempo.set(newTempo)
+    def set_gui_tempo(self, new_gui_Tempo):
+         self.tempo = new_gui_Tempo
 
-    def get_note_length(self):
-        return self.note_length.get()
+    def get_gui_note_length(self):
+        return self.note_length
 
-    def set_note_length(self, new_note_length):
-        self.note_length.set(new_note_length)
+    def set_gui_note_length(self, new_gui_note_length):
+        self.note_length = new_gui_note_length
 
-    def get_velocity(self):
-        return self.velocity.get()
+    def get_gui_velocity(self):
+        return self.velocity
 
-    def set_velocity(self, new_velocity):
-        self.velocity.set(velocity)
+    def set_gui_velocity(self, new_gui_velocity):
+        self.velocity = new_gui_velocity
 
     def get_all_values(self):
-        return((self.tempo, self.note_length, self.velocity))
+        tempo = self.tempo
+        note_length = self.note_length
+        velocity = self.velocity
+        return((tempo, note_length, velocity))
 
 
-#noteLengthSlider = Scale(window, variable = note_length, )
+#gui_note_length_Slider = Scale(window, variable = gui_note_length, )
 
-# def printTempo():
-#     print(stepGUI.tempo)
+# def printgui_Tempo():
+#     print(stepGUI.gui_tempo)
 
 if __name__ == "__main__":
     stepGUI = StepSequencerGUI()
 
     # otherWindow = Tk()
-    # btn = Button(otherWindow,Text="push the tempo",  bg="black", fg="white")#command=print(stepGUI.tempo),
+    # btn = Button(otherWindow,Text="push the gui_tempo",  bg="black", fg="white")#command=print(stepGUI.gui_tempo),
     # btn.pack()
     # otherWindow.mainloop()
 
