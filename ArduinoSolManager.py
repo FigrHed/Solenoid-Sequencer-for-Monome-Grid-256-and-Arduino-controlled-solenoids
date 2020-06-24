@@ -35,7 +35,6 @@ class SolenoidController():
             arduino = serial.Serial(self.arduino_port,self.baudrate)
             print("Connected to " + str(self.arduino_port) )
             return arduino
-
         except:
             print("Could not connect to " + str(self.arduino_port) )
     
@@ -47,7 +46,7 @@ class SolenoidController():
         msg = osc_message_builder.OscMessageBuilder(address='/sole' + str(sol_id) + '/on')
         msg.add_arg(int(2*velocity))
         msg = msg.build()
-        print(msg.dgram)
+        # print(msg.dgram)
         slip_msg = sliplib.encode(msg.dgram)
         
         self.arduino.write(slip_msg)
